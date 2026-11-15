@@ -1,0 +1,337 @@
+{
+  "entities": {
+    "UserPrivate": {
+      "title": "UserPrivate",
+      "description": "Private user account record containing PII such as email.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "email": { "type": "string", "format": "email", "minLength": 3, "maxLength": 254 },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "photoURL": { "type": "string", "minLength": 0, "maxLength": 500 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "displayName", "photoURL", "createdAt", "updatedAt"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Public collaborator profile without email PII.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "photoURL": { "type": "string", "minLength": 0, "maxLength": 500 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName", "photoURL", "updatedAt"]
+    },
+    "ProjectMembership": {
+      "title": "ProjectMembership",
+      "description": "Per-user index of joined projects for query isolation.",
+      "type": "object",
+      "properties": {
+        "projectId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "projectName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "projectKey": { "type": "string", "minLength": 2, "maxLength": 6, "pattern": "^[A-Z0-9]{2,6}$" },
+        "role": { "type": "string", "enum": ["owner", "admin", "member"] },
+        "joinedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["projectId", "projectName", "projectKey", "role", "joinedAt"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "Real-time user notification.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "recipientUid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "actorUid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "actorName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "projectId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "projectName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "taskId": { "type": "string", "minLength": 0, "maxLength": 128 },
+        "taskKey": { "type": "string", "minLength": 0, "maxLength": 16 },
+        "type": {
+          "type": "string",
+          "enum": [
+            "task_assigned", "task_reassigned", "task_moved", "task_status_changed",
+            "task_completed", "comment_added", "user_mentioned", "due_approaching",
+            "task_overdue", "member_joined", "sprint_started", "sprint_completed",
+            "dependency_blocked", "project_invitation"
+          ]
+        },
+        "message": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "read": { "type": "boolean" },
+        "dedupeKey": { "type": "string", "minLength": 0, "maxLength": 160 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "recipientUid", "actorUid", "actorName", "projectId", "projectName", "taskId", "taskKey", "type", "message", "read", "createdAt"]
+    },
+    "NotificationPreference": {
+      "title": "NotificationPreference",
+      "description": "User notification delivery preferences.",
+      "type": "object",
+      "properties": {
+        "all": { "type": "boolean" },
+        "assignments": { "type": "boolean" },
+        "mentions": { "type": "boolean" },
+        "reminders": { "type": "boolean" },
+        "projectActivity": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["all", "assignments", "mentions", "reminders", "projectActivity", "updatedAt"]
+    },
+    "SavedFilter": {
+      "title": "SavedFilter",
+      "description": "User-owned saved search and filter preset.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "name": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "projectId": { "type": "string", "minLength": 0, "maxLength": 128 },
+        "criteriaJson": { "type": "string", "minLength": 2, "maxLength": 2000 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "projectId", "criteriaJson", "createdAt", "updatedAt"]
+    },
+    "CustomTemplate": {
+      "title": "CustomTemplate",
+      "description": "User-saved project template.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "description": { "type": "string", "minLength": 0, "maxLength": 500 },
+        "category": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "payloadJson": { "type": "string", "minLength": 2, "maxLength": 16000 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "description", "category", "payloadJson", "createdAt"]
+    },
+    "Project": {
+      "title": "Project",
+      "description": "Group project workspace.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "key": { "type": "string", "minLength": 2, "maxLength": 6, "pattern": "^[A-Z0-9]{2,6}$" },
+        "description": { "type": "string", "minLength": 0, "maxLength": 500 },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "taskCounter": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "key", "description", "ownerId", "taskCounter", "createdAt", "updatedAt"]
+    },
+    "ProjectMember": {
+      "title": "ProjectMember",
+      "description": "Project member roster governing access.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "photoURL": { "type": "string", "minLength": 0, "maxLength": 500 },
+        "role": { "type": "string", "enum": ["owner", "admin", "member"] },
+        "inviteCode": { "type": "string", "minLength": 0, "maxLength": 32 },
+        "joinedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName", "photoURL", "role", "inviteCode", "joinedAt"]
+    },
+    "TaskCard": {
+      "title": "TaskCard",
+      "description": "Kanban/sprint task card inside a project (backward compatible).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "projectId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "taskKey": { "type": "string", "minLength": 3, "maxLength": 16 },
+        "title": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "description": { "type": "string", "minLength": 0, "maxLength": 4000 },
+        "status": { "type": "string", "enum": ["backlog", "todo", "in_progress", "done"] },
+        "priority": { "type": "string", "enum": ["low", "medium", "high", "urgent"] },
+        "position": { "type": "number" },
+        "assigneeUid": { "type": "string", "minLength": 0, "maxLength": 128 },
+        "assigneeName": { "type": "string", "minLength": 0, "maxLength": 80 },
+        "assigneePhoto": { "type": "string", "minLength": 0, "maxLength": 500 },
+        "tags": { "type": "array" },
+        "dueDate": { "type": "string", "minLength": 0, "maxLength": 20 },
+        "startDate": { "type": "string", "minLength": 0, "maxLength": 20 },
+        "sprintId": { "type": "string", "minLength": 0, "maxLength": 128 },
+        "milestoneId": { "type": "string", "minLength": 0, "maxLength": 128 },
+        "estimatedMinutes": { "type": "integer" },
+        "actualMinutes": { "type": "integer" },
+        "subtasks": { "type": "array" },
+        "blockedBy": { "type": "array" },
+        "blocks": { "type": "array" },
+        "relatedTaskIds": { "type": "array" },
+        "recurrence": { "type": "object" },
+        "overrideReason": { "type": "string", "minLength": 0, "maxLength": 300 },
+        "commentCount": { "type": "integer" },
+        "createdBy": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "createdByName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id", "projectId", "taskKey", "title", "description", "status", "priority",
+        "position", "assigneeUid", "assigneeName", "assigneePhoto", "tags",
+        "dueDate", "commentCount", "createdBy", "createdByName", "createdAt", "updatedAt"
+      ]
+    },
+    "TaskComment": {
+      "title": "TaskComment",
+      "description": "Comment thread entry on a task card.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "projectId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "taskId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "authorUid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "authorName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "authorPhoto": { "type": "string", "minLength": 0, "maxLength": 500 },
+        "body": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "mentions": { "type": "array" },
+        "edited": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "projectId", "taskId", "authorUid", "authorName", "authorPhoto", "body", "createdAt", "updatedAt"]
+    },
+    "TaskAttachment": {
+      "title": "TaskAttachment",
+      "description": "File attachment metadata linked to Firebase Storage.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "projectId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "taskId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "name": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "size": { "type": "integer" },
+        "contentType": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "storagePath": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "downloadUrl": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "uploadedBy": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "uploadedByName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "projectId", "taskId", "name", "size", "contentType", "storagePath", "downloadUrl", "uploadedBy", "uploadedByName", "createdAt"]
+    },
+    "TimeEntry": {
+      "title": "TimeEntry",
+      "description": "Time tracking entry for a task card.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "projectId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "taskId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "userUid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "userName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "startTime": { "type": "string", "format": "date-time" },
+        "endTime": { "type": "string", "format": "date-time" },
+        "durationMinutes": { "type": "integer" },
+        "note": { "type": "string", "minLength": 0, "maxLength": 300 },
+        "isManual": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "projectId", "taskId", "userUid", "userName", "startTime", "endTime", "durationMinutes", "note", "isManual", "createdAt"]
+    },
+    "Sprint": {
+      "title": "Sprint",
+      "description": "Project sprint cycle.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "projectId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "goal": { "type": "string", "minLength": 0, "maxLength": 500 },
+        "startDate": { "type": "string", "minLength": 10, "maxLength": 20 },
+        "endDate": { "type": "string", "minLength": 10, "maxLength": 20 },
+        "status": { "type": "string", "enum": ["planned", "active", "completed"] },
+        "retrospectiveNotes": { "type": "string", "minLength": 0, "maxLength": 2000 },
+        "createdBy": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "projectId", "name", "goal", "startDate", "endDate", "status", "retrospectiveNotes", "createdBy", "createdAt", "updatedAt"]
+    },
+    "Milestone": {
+      "title": "Milestone",
+      "description": "Project delivery milestone.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "projectId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "description": { "type": "string", "minLength": 0, "maxLength": 500 },
+        "dueDate": { "type": "string", "minLength": 10, "maxLength": 20 },
+        "completed": { "type": "boolean" },
+        "createdBy": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "projectId", "name", "description", "dueDate", "completed", "createdBy", "createdAt", "updatedAt"]
+    },
+    "ProjectActivity": {
+      "title": "ProjectActivity",
+      "description": "Immutable audit history record for a project.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "projectId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "actorUid": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "actorName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "actorPhoto": { "type": "string", "minLength": 0, "maxLength": 500 },
+        "action": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "taskId": { "type": "string", "minLength": 0, "maxLength": 128 },
+        "taskKey": { "type": "string", "minLength": 0, "maxLength": 16 },
+        "summary": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "projectId", "actorUid", "actorName", "actorPhoto", "action", "taskId", "taskKey", "summary", "createdAt"]
+    },
+    "ProjectInvite": {
+      "title": "ProjectInvite",
+      "description": "Cryptographically random project invitation code with expiration and usage controls.",
+      "type": "object",
+      "properties": {
+        "code": { "type": "string", "minLength": 10, "maxLength": 32, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "projectId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "projectName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "projectKey": { "type": "string", "minLength": 2, "maxLength": 6, "pattern": "^[A-Z0-9]{2,6}$" },
+        "createdBy": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "role": { "type": "string", "enum": ["admin", "member"] },
+        "active": { "type": "boolean" },
+        "singleUse": { "type": "boolean" },
+        "maxUses": { "type": "integer" },
+        "useCount": { "type": "integer" },
+        "invitedEmail": { "type": "string", "minLength": 0, "maxLength": 254 },
+        "expiresAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["code", "projectId", "projectName", "projectKey", "createdBy", "role", "active", "singleUse", "maxUses", "useCount", "invitedEmail", "expiresAt", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": { "schema": { "$ref": "#/entities/UserPrivate" }, "description": "Private user PII." },
+    "/userProfiles/{userId}": { "schema": { "$ref": "#/entities/UserProfile" }, "description": "Public collaborator profile." },
+    "/users/{userId}/projectMemberships/{projectId}": { "schema": { "$ref": "#/entities/ProjectMembership" }, "description": "User project index." },
+    "/users/{userId}/notifications/{notificationId}": { "schema": { "$ref": "#/entities/Notification" }, "description": "User notifications." },
+    "/users/{userId}/preferences/{prefId}": { "schema": { "$ref": "#/entities/NotificationPreference" }, "description": "User notification preferences." },
+    "/users/{userId}/savedFilters/{filterId}": { "schema": { "$ref": "#/entities/SavedFilter" }, "description": "User saved search filters." },
+    "/users/{userId}/templates/{templateId}": { "schema": { "$ref": "#/entities/CustomTemplate" }, "description": "User custom project templates." },
+    "/projects/{projectId}": { "schema": { "$ref": "#/entities/Project" }, "description": "Project workspace root." },
+    "/projects/{projectId}/members/{memberId}": { "schema": { "$ref": "#/entities/ProjectMember" }, "description": "Project member roster." },
+    "/projects/{projectId}/invites/{inviteCode}": { "schema": { "$ref": "#/entities/ProjectInvite" }, "description": "Project-scoped invitation list for admins." },
+    "/projects/{projectId}/sprints/{sprintId}": { "schema": { "$ref": "#/entities/Sprint" }, "description": "Project sprints." },
+    "/projects/{projectId}/milestones/{milestoneId}": { "schema": { "$ref": "#/entities/Milestone" }, "description": "Project milestones." },
+    "/projects/{projectId}/activities/{activityId}": { "schema": { "$ref": "#/entities/ProjectActivity" }, "description": "Immutable project audit history." },
+    "/projects/{projectId}/tasks/{taskId}": { "schema": { "$ref": "#/entities/TaskCard" }, "description": "Project task cards." },
+    "/projects/{projectId}/tasks/{taskId}/comments/{commentId}": { "schema": { "$ref": "#/entities/TaskComment" }, "description": "Task comments." },
+    "/projects/{projectId}/tasks/{taskId}/attachments/{attachmentId}": { "schema": { "$ref": "#/entities/TaskAttachment" }, "description": "Task attachments." },
+    "/projects/{projectId}/tasks/{taskId}/timeEntries/{entryId}": { "schema": { "$ref": "#/entities/TimeEntry" }, "description": "Task time entries." },
+    "/projectInvites/{inviteCode}": { "schema": { "$ref": "#/entities/ProjectInvite" }, "description": "Publicly redeemable invitation lookup by exact code." }
+  }
+}

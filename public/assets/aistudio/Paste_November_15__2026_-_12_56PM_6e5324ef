@@ -1,0 +1,1390 @@
+# MASTER EXECUTION PROMPT — CADENCE COMPLETE PROJECT TRANSFORMATION
+
+You are acting as a senior full-stack software architect, senior React + TypeScript developer, Firebase specialist, cybersecurity engineer, UI/UX designer, QA automation engineer, and DevOps engineer.
+
+Your task is to transform my EXISTING project, **Cadence**, into a complete, premium, production-ready collaborative project management platform.
+
+I am providing you with the complete existing source code. You MUST inspect the entire project before making changes.
+
+This is a FULL IMPLEMENTATION TASK, not a suggestion or planning task.
+
+Execute all the enhancements described below in one continuous development process. Do not stop after analysis, do not provide only recommendations, and do not ask me for approval after each phase.
+
+---
+
+# 1. MOST IMPORTANT: PRESERVE THE EXISTING PROJECT
+
+The existing application already contains:
+
+- React 19
+- TypeScript
+- Vite
+- Tailwind CSS
+- Firebase Authentication
+- Cloud Firestore
+- Firebase Admin SDK
+- Express server
+- WebSocket real-time communication
+- @dnd-kit drag-and-drop
+- Motion animations
+- Existing Firebase configuration
+- Existing Firestore security rules
+- Existing task management components
+
+Existing source files include:
+
+- `src/App.tsx`
+- `src/index.css`
+- `src/types/pm.ts`
+- `src/lib/firebase.ts`
+- `src/lib/firestoreService.ts`
+- `src/lib/firestoreErrors.ts`
+- `src/hooks/useTheme.ts`
+- `src/hooks/useWebSocket.ts`
+- `src/components/AuthScreen.tsx`
+- `src/components/Sidebar.tsx`
+- `src/components/TopBar.tsx`
+- `src/components/Avatar.tsx`
+- `src/components/PriorityBadge.tsx`
+- `src/components/FilterToolbar.tsx`
+- `src/components/TaskCardItem.tsx`
+- `src/components/KanbanColumn.tsx`
+- `src/components/KanbanBoard.tsx`
+- `src/components/TaskListView.tsx`
+- `src/components/ActivityFeedView.tsx`
+- `src/components/TaskDetailDrawer.tsx`
+- `src/components/Modals.tsx`
+- `src/components/ErrorBoundary.tsx`
+- `src/components/ToastContainer.tsx`
+- `server.ts`
+- `firestore.rules`
+- `firestore.rules.test.ts`
+- `security_spec.md`
+- `firebase-blueprint.json`
+- `package.json`
+- `vite.config.ts`
+- `.env.example`
+- `README.md`
+
+You may reorganize the source code if necessary, but preserve working functionality and integrate new functionality into the existing architecture.
+
+## Non-negotiable preservation rules
+
+1. Do not rebuild the project from scratch.
+2. Do not replace Firebase with another database.
+3. Do not remove existing authentication.
+4. Do not remove existing projects, tasks, memberships, comments, invitations, notifications, or activity data.
+5. Do not replace working functionality with static UI.
+6. Do not introduce fake data into production features.
+7. Do not create buttons that do nothing.
+8. Do not leave unfinished placeholder components.
+9. Do not expose Firebase Admin credentials, API keys, session secrets, or private environment variables.
+10. Do not weaken existing security rules to make features work.
+11. Do not silently change existing data structures in a way that breaks old records.
+12. Maintain compatibility with existing Firestore documents.
+13. Keep the existing application identity as **Cadence**.
+
+Before modifying anything, inspect the complete source code, dependencies, current Firestore schema, security rules, WebSocket architecture, authentication flow, and all existing UI components.
+
+Create a safe implementation plan internally, then execute it without waiting for approval.
+
+---
+
+# 2. BRAND IDENTITY AND VISUAL REDESIGN
+
+Transform Cadence into a premium SaaS productivity platform.
+
+Brand name: CADENCE
+
+Suggested tagline:
+
+"Plan Smarter. Collaborate Better. Deliver Faster."
+
+Visual direction:
+
+- Premium SaaS dashboard
+- Clean and modern interface
+- Professional productivity software
+- Elegant glassmorphism used selectively
+- Smooth transitions and micro-interactions
+- Consistent spacing and typography
+- Excellent information hierarchy
+- Minimal visual clutter
+- Professional enterprise-quality appearance
+
+Use a cohesive color system:
+
+Primary:
+- Midnight Navy: #101827
+- Deep Navy: #172B4D
+- Royal Blue: #315ECA
+- Electric Blue: #5B8DEF
+
+Light surfaces:
+- Background: #F5F8FC
+- Card: #FFFFFF
+- Secondary Surface: #EDF2F8
+- Border: #E2E8F0
+
+Typography:
+- Primary Text: #172033
+- Secondary Text: #64748B
+- Muted Text: #94A3B8
+
+Semantic colors:
+- Success: #16A34A
+- Warning: #D97706
+- Danger: #DC2626
+- Information: #2563EB
+
+Design requirements:
+
+- Create a consistent design token system.
+- Use reusable buttons, cards, dialogs, dropdowns, inputs, badges, tooltips, and menus.
+- Add professional hover and focus states.
+- Improve the sidebar and top navigation.
+- Add polished skeleton loaders.
+- Improve empty states.
+- Improve error states.
+- Add clear confirmation dialogs.
+- Make every page visually consistent.
+- Use responsive typography and spacing.
+- Avoid excessive gradients, excessive shadows, and unnecessary animations.
+- Support accessible light and dark themes.
+
+Do not sacrifice usability for appearance.
+
+---
+
+# 3. SECURITY: FIX ALL CRITICAL SECURITY ISSUES FIRST
+
+This is the most important technical requirement.
+
+Perform a complete security audit of the frontend, Express server, Firestore rules, Firebase Authentication, WebSocket communication, invitations, and notifications.
+
+## 3.1 WebSocket security
+
+Inspect `server.ts` and `src/hooks/useWebSocket.ts`.
+
+Implement:
+
+- Verify authentication before allowing socket connections.
+- Validate Firebase identity tokens on the server.
+- Verify project membership before joining a project room.
+- Verify that the authenticated user has permission to send each event.
+- Never trust a client-supplied user ID.
+- Never trust client-supplied actor names or roles.
+- Derive actor identity from the authenticated server session.
+- Validate every incoming WebSocket message against a strict schema.
+- Reject malformed messages.
+- Reject unauthorized room access.
+- Validate project IDs and task IDs.
+- Rate-limit sensitive socket events.
+- Prevent unauthorized notification delivery.
+- Prevent clients from broadcasting arbitrary activity events.
+- Prevent users from impersonating other members.
+- Implement safe socket cleanup and room cleanup.
+- Handle expired authentication tokens.
+- Handle reconnection and reconnection authentication.
+- Prevent duplicate event processing where applicable.
+
+Add a secure authorization layer shared by all WebSocket event handlers.
+
+The server must check project membership for every sensitive action, not just when the socket first connects.
+
+## 3.2 Firestore security rules
+
+Audit the entire `firestore.rules` file.
+
+Enforce:
+
+- Authentication for private data.
+- Project membership for project data.
+- Correct owner/admin/member permissions.
+- Task ownership and assignment validation.
+- Project membership validation for assignees.
+- Secure invitation access.
+- Secure notification ownership.
+- Comment ownership and permissions.
+- Protection against role escalation.
+- Protection against unauthorized project deletion.
+- Protection against changing project ownership.
+- Protection against arbitrary modification of user identity fields.
+- Validation of allowed fields and data types.
+- Maximum lengths for user-controlled strings.
+- Valid status and priority values.
+- Immutable creation metadata where appropriate.
+- Server-controlled fields where appropriate.
+
+Do not trust frontend role checks.
+
+Every permission must be enforced at the appropriate backend or Firestore security boundary.
+
+Ensure the Firestore rules are compatible with all existing legitimate features.
+
+## 3.3 Invitation security
+
+Improve project invitations.
+
+Implement:
+
+- Cryptographically secure random invitation codes.
+- Sufficiently long and unpredictable codes.
+- Expiration timestamps.
+- Invitation revocation.
+- Explicit single-use or reusable invitation policy.
+- Role validation.
+- Project membership verification.
+- Protection against invitation-code brute force.
+- Rate limiting.
+- Safe invitation acceptance.
+- Prevention of duplicate memberships.
+- Prevention of unauthorized admin creation.
+- Clear error messages for expired, revoked, or invalid invitations.
+
+Only authorized project owners/admins may create or revoke invitations.
+
+Never permit users to grant themselves elevated privileges.
+
+## 3.4 Authentication and authorization
+
+Improve the authentication experience while preserving Firebase Authentication.
+
+Implement:
+
+- Registration.
+- Login.
+- Logout.
+- Password reset.
+- Email verification where appropriate.
+- Authentication state persistence.
+- Expired-session handling.
+- Protected routes.
+- Role-aware navigation.
+- Secure account error handling.
+- Safe user profile updates.
+
+Support proper project roles:
+
+- Owner
+- Admin
+- Member
+
+Enforce role permissions on the server and in Firestore rules.
+
+Do not rely only on hiding buttons in React.
+
+---
+
+# 4. ADVANCED TASK MANAGEMENT
+
+Upgrade the existing task management system.
+
+Preserve the current statuses:
+
+- Backlog
+- To Do
+- In Progress
+- Done
+
+Preserve the current priorities:
+
+- Low
+- Medium
+- High
+- Urgent
+
+Implement the following enhancements.
+
+## 4.1 Subtasks and checklists
+
+Allow users to:
+
+- Create subtasks.
+- Edit subtasks.
+- Delete subtasks.
+- Mark subtasks complete.
+- Track checklist progress.
+- Display completed versus total subtasks.
+- Display progress on task cards.
+- Display subtasks inside the task detail drawer.
+
+Prevent invalid parent-child relationships and recursive task dependencies.
+
+## 4.2 Task dependencies
+
+Implement:
+
+- Blocked by.
+- Blocks.
+- Related tasks.
+- Dependency visualization.
+- Clear blocked status.
+- Dependency validation.
+- Circular dependency prevention.
+
+Prevent a task from being marked complete when its required dependencies remain incomplete, unless an authorized user explicitly overrides the restriction with a recorded reason.
+
+## 4.3 Recurring tasks
+
+Support:
+
+- Daily.
+- Weekly.
+- Monthly.
+- Custom recurring schedules.
+
+Allow users to configure:
+
+- Recurrence interval.
+- Start date.
+- End date.
+- Assignee.
+- Priority.
+- Project.
+- Recurrence pattern.
+
+Generate recurring tasks reliably without creating duplicates.
+
+## 4.4 Attachments
+
+Add task attachment functionality.
+
+Support:
+
+- Uploading documents.
+- Images.
+- PDFs.
+- Downloading attachments.
+- Attachment previews where supported.
+- File size limits.
+- File type validation.
+- Upload progress.
+- Removing attachments.
+
+Use an appropriate secure storage solution compatible with the current Firebase architecture.
+
+If Firebase Storage is not configured, implement the integration and document the required setup. Do not pretend uploads work without a configured storage backend.
+
+Validate access before uploads and downloads.
+
+## 4.5 Time tracking
+
+Implement:
+
+- Start timer.
+- Pause timer.
+- Stop timer.
+- Manual time entries.
+- Estimated time.
+- Actual time.
+- Time spent per task.
+- Time spent per member.
+- Time summaries.
+
+Prevent multiple active timers for the same user/task context where inappropriate.
+
+Store timestamps reliably and handle time zones correctly.
+
+## 4.6 Improved task detail drawer
+
+Upgrade the existing `TaskDetailDrawer.tsx`.
+
+Include:
+
+- Task title.
+- Description.
+- Status.
+- Priority.
+- Assignee.
+- Reporter.
+- Due date.
+- Tags.
+- Subtasks.
+- Dependencies.
+- Attachments.
+- Time tracking.
+- Comments.
+- Activity history.
+- Created date.
+- Updated date.
+
+Keep the interface organized using tabs or clearly structured sections.
+
+---
+
+# 5. ADVANCED KANBAN AND TASK VIEWS
+
+Upgrade the existing Kanban board and list view.
+
+## Kanban enhancements
+
+- Smooth drag-and-drop.
+- Optimistic updates with rollback on failure.
+- Real-time synchronization.
+- Clear drag indicators.
+- Task count per column.
+- Column progress indicators.
+- Better task cards.
+- Priority indicators.
+- Assignee avatars.
+- Due-date warnings.
+- Overdue labels.
+- Subtask completion indicators.
+- Search and filter integration.
+- Responsive mobile interactions.
+
+## List view enhancements
+
+- Sortable columns.
+- Configurable visible columns.
+- Search.
+- Multi-field filtering.
+- Bulk selection.
+- Bulk status changes.
+- Bulk assignment.
+- Bulk priority changes.
+- Bulk deletion with confirmation.
+- Pagination or efficient virtualization for large datasets.
+
+## Additional views
+
+Implement:
+
+1. Kanban view.
+2. List view.
+3. Calendar view.
+4. Timeline/Gantt view.
+5. My Tasks view.
+6. Overdue Tasks view.
+
+All views must use actual Firestore data.
+
+All changes must remain synchronized across views.
+
+---
+
+# 6. ADVANCED FILTERS AND GLOBAL SEARCH
+
+Upgrade `FilterToolbar.tsx` and `TopBar.tsx`.
+
+Implement filters for:
+
+- Status.
+- Priority.
+- Assignee.
+- Reporter.
+- Due date.
+- Created date.
+- Tags.
+- Overdue status.
+- Completion status.
+
+Add:
+
+- Search by task title.
+- Search by description.
+- Search by task key.
+- Search by project name.
+- Search by assignee.
+
+Implement saved filters and saved views.
+
+Allow users to save, rename, update, and delete their own filters.
+
+Add clear-all functionality.
+
+Use efficient Firestore queries and indexes. Do not fetch the entire database for every search.
+
+If a search requires a dedicated indexing service that is not configured, implement a clearly documented compatible approach rather than pretending a full-text search engine exists.
+
+---
+
+# 7. PROJECT ANALYTICS DASHBOARD
+
+Create a professional analytics dashboard using actual Firestore data.
+
+Create reusable components such as:
+
+- `AnalyticsDashboard.tsx`
+- `StatCard.tsx`
+- `TaskCompletionChart.tsx`
+- `PriorityDistributionChart.tsx`
+- `WorkloadChart.tsx`
+- `ProjectProgressChart.tsx`
+- `BurndownChart.tsx`
+
+The dashboard should display:
+
+## Summary cards
+
+- Total projects.
+- Total tasks.
+- Completed tasks.
+- In-progress tasks.
+- Pending tasks.
+- Overdue tasks.
+- Completion percentage.
+- Active team members.
+
+## Charts
+
+- Tasks completed over time.
+- Tasks created over time.
+- Task status distribution.
+- Task priority distribution.
+- Team workload.
+- Project progress.
+- Weekly productivity.
+- Sprint burndown chart.
+
+## Project insights
+
+- Most active projects.
+- Projects falling behind.
+- Overdue task counts.
+- Workload imbalance.
+- Upcoming deadlines.
+- Team productivity trends.
+
+## Analytics filters
+
+- Date range.
+- Project.
+- Team member.
+- Task priority.
+- Task status.
+
+All analytics must be calculated from actual stored records.
+
+Do not use hardcoded chart values.
+
+Display useful empty states when there is insufficient data.
+
+Ensure charts are responsive and accessible.
+
+---
+
+# 8. SPRINT MANAGEMENT
+
+Introduce complete sprint management.
+
+Implement:
+
+- Sprint creation.
+- Sprint editing.
+- Sprint deletion with safe validation.
+- Sprint name.
+- Sprint goal.
+- Start date.
+- End date.
+- Sprint status.
+- Sprint task assignment.
+- Sprint backlog.
+- Sprint progress.
+- Sprint completion.
+
+Add:
+
+- Active sprint dashboard.
+- Sprint planning interface.
+- Sprint backlog.
+- Burndown chart.
+- Completed versus remaining work.
+- Sprint history.
+- Sprint retrospective notes.
+
+Prevent invalid date ranges and overlapping active sprints where the project policy requires it.
+
+Connect sprint tasks to the existing task system.
+
+Do not duplicate tasks unnecessarily.
+
+---
+
+# 9. TEAM MANAGEMENT AND COLLABORATION
+
+Improve the project member experience.
+
+Implement:
+
+- Project member directory.
+- Member profile details.
+- Role badges.
+- Member invitation management.
+- Pending invitation list.
+- Member removal with permission checks.
+- Role changes with authorization.
+- Member activity summaries.
+- Workload summaries.
+- Online presence.
+- Last active status where appropriate.
+
+Support owner/admin/member permission differences.
+
+Add a team workload view that uses real assigned tasks.
+
+Prevent removing the final project owner.
+
+Prevent unauthorized changes to project membership.
+
+---
+
+# 10. NOTIFICATION CENTER
+
+Create a complete notification center.
+
+Support notifications for:
+
+- Task assigned.
+- Task reassigned.
+- Task status changed.
+- Task moved.
+- Comment added.
+- User mentioned.
+- Due date approaching.
+- Task overdue.
+- Project invitation.
+- Member joined.
+- Sprint started.
+- Sprint completed.
+- Dependency blocked.
+- Task completed.
+
+Implement:
+
+- Unread count.
+- Mark as read.
+- Mark all as read.
+- Delete notification.
+- Notification history.
+- Notification filtering.
+- Notification preferences.
+- Real-time notification updates.
+- Notification deduplication.
+
+Add notification preferences:
+
+- All notifications.
+- Task assignments.
+- Comments and mentions.
+- Due-date reminders.
+- Project activity.
+
+Email notifications should be implemented only with a real, securely configured email provider.
+
+If credentials are missing, build the integration points and document the configuration. Do not simulate email delivery.
+
+Do not expose private notification content to unauthorized users.
+
+---
+
+# 11. ACTIVITY FEED AND AUDIT HISTORY
+
+Upgrade `ActivityFeedView.tsx`.
+
+Track meaningful events:
+
+- Project created.
+- Project updated.
+- Task created.
+- Task updated.
+- Task moved.
+- Priority changed.
+- Assignee changed.
+- Comment added.
+- Member joined.
+- Member removed.
+- Invitation created.
+- Invitation revoked.
+- Sprint created.
+- Sprint completed.
+
+Display:
+
+- Actor.
+- Action.
+- Project.
+- Related task.
+- Timestamp.
+- Useful description.
+
+Activity records must be trustworthy.
+
+Do not allow a client to impersonate another user by submitting arbitrary actor details.
+
+Restrict sensitive audit records from unauthorized modification or deletion.
+
+---
+
+# 12. COMMENTS, MENTIONS AND DISCUSSIONS
+
+Upgrade the task comment system.
+
+Implement:
+
+- Add comment.
+- Edit own comment.
+- Delete own comment.
+- Authorized moderation.
+- User mentions using @.
+- Mention suggestions from actual project members.
+- Mention notifications.
+- Comment timestamps.
+- Comment activity history.
+
+Validate comment lengths.
+
+Prevent XSS and unsafe content rendering.
+
+Do not allow users to edit another user's comments without an explicit authorized moderation permission.
+
+---
+
+# 13. CALENDAR AND DEADLINE MANAGEMENT
+
+Create a calendar view.
+
+Support:
+
+- Monthly calendar.
+- Weekly calendar.
+- Daily view.
+- Tasks by due date.
+- Overdue tasks.
+- Upcoming deadlines.
+- Dragging tasks to change due dates where permitted.
+- Filters by assignee, project, priority and status.
+
+Add deadline reminders.
+
+Handle date and time zones correctly.
+
+Avoid storing dates in inconsistent formats.
+
+---
+
+# 14. TIMELINE AND GANTT VIEW
+
+Create a timeline/Gantt view.
+
+Display:
+
+- Task start date.
+- Task due date.
+- Duration.
+- Dependencies.
+- Project milestones.
+- Progress.
+- Assignee.
+
+Allow authorized users to adjust task dates visually.
+
+Prevent invalid dependency relationships.
+
+Keep timeline changes synchronized with Firestore and other views.
+
+If a task has no start date, use a clearly defined visual fallback without silently changing its stored data.
+
+---
+
+# 15. MY TASKS AND PERSONAL PRODUCTIVITY
+
+Create a dedicated My Tasks page.
+
+Display the current user's:
+
+- Assigned tasks.
+- Created tasks.
+- Due today.
+- Upcoming tasks.
+- Overdue tasks.
+- Completed tasks.
+- High-priority tasks.
+
+Add:
+
+- Personal task filters.
+- Personal saved views.
+- Personal productivity summary.
+- Quick task creation.
+- Task sorting.
+- Due-date grouping.
+
+Respect the user's project permissions.
+
+---
+
+# 16. PROJECT TEMPLATES AND MILESTONES
+
+Implement reusable project templates.
+
+Provide useful templates such as:
+
+- Software Development.
+- Website Development.
+- Academic Project.
+- Research Project.
+- Marketing Campaign.
+- General Team Project.
+
+Templates may include predefined statuses, tasks, milestones, and suggested workflows.
+
+Allow authorized users to create custom templates from existing projects.
+
+Implement project milestones with:
+
+- Name.
+- Description.
+- Due date.
+- Related tasks.
+- Completion status.
+- Progress.
+
+Templates must create real project data and must not overwrite existing projects.
+
+---
+
+# 17. REPORTING AND EXPORTS
+
+Add export functionality for authorized users.
+
+Support:
+
+- CSV export of tasks.
+- CSV export of project members.
+- Project progress report.
+- Task completion report.
+- Workload report.
+- Sprint report.
+- Printable project report.
+
+Where practical, provide PDF export.
+
+Ensure exports respect project permissions and do not expose private information.
+
+Add clear export date ranges and filters.
+
+---
+
+# 18. UI/UX AND RESPONSIVE DESIGN
+
+Make the entire application work correctly on:
+
+- Desktop.
+- Laptop.
+- Tablet.
+- Mobile.
+
+## Desktop
+
+- Professional sidebar.
+- Clear top navigation.
+- Optimized workspace.
+- Multi-column Kanban board.
+- Well-organized dashboards.
+
+## Tablet
+
+- Collapsible sidebar.
+- Responsive cards.
+- Adapted task views.
+- Usable menus and dialogs.
+
+## Mobile
+
+- Mobile navigation drawer.
+- No horizontal page overflow.
+- Touch-friendly controls.
+- Responsive task cards.
+- Mobile-friendly task detail view.
+- Mobile-friendly filters.
+- Usable forms.
+- Accessible dropdowns.
+- Responsive analytics charts.
+- Touch-compatible drag-and-drop.
+
+Do not simply shrink the desktop UI.
+
+Design dedicated responsive layouts where needed.
+
+Verify the application at common viewport widths, including 360px, 390px, 768px, 1024px and 1440px.
+
+---
+
+# 19. ACCESSIBILITY AND USABILITY
+
+Implement:
+
+- Semantic HTML.
+- Keyboard navigation.
+- Visible focus indicators.
+- Accessible dialogs.
+- Accessible form labels.
+- Screen-reader-friendly controls.
+- Sufficient color contrast.
+- Reduced-motion support.
+- Clear error messages.
+- Form validation.
+- Confirmation for destructive actions.
+
+Ensure interactive elements are usable without a mouse.
+
+---
+
+# 20. PERFORMANCE AND SCALABILITY
+
+Optimize the application for large projects and teams.
+
+Implement where appropriate:
+
+- Lazy loading.
+- Code splitting.
+- Efficient React rendering.
+- Memoization where beneficial.
+- Firestore pagination.
+- Query optimization.
+- Appropriate indexes.
+- Avoid duplicate listeners.
+- Clean up Firestore subscriptions.
+- Clean up WebSocket listeners.
+- Debounced search.
+- Virtualized long lists.
+- Optimistic updates with rollback.
+- Efficient analytics aggregation.
+
+Do not introduce unnecessary complexity or premature abstractions.
+
+Do not fetch all projects and tasks repeatedly when a targeted query is sufficient.
+
+---
+
+# 21. FIREBASE DATA MODEL AND MIGRATIONS
+
+Review the current Firestore document structure before changing it.
+
+Add compatible data structures for:
+
+- Subtasks.
+- Dependencies.
+- Recurrence configuration.
+- Attachments.
+- Time entries.
+- Sprints.
+- Milestones.
+- Saved filters.
+- Project templates.
+- User notification preferences.
+- Extended notifications.
+- Analytics-related records if required.
+
+Requirements:
+
+1. Preserve existing documents.
+2. Preserve existing document IDs.
+3. Preserve current user accounts.
+4. Preserve existing memberships.
+5. Preserve tasks and comments.
+6. Use optional fields or safe defaults where possible.
+7. Avoid unnecessary migrations.
+8. Provide a migration script only when required.
+9. Make migrations idempotent.
+10. Back up data before destructive operations.
+11. Document all new collections and fields.
+12. Update Firestore rules and indexes consistently.
+
+Never delete existing production data to make the new schema work.
+
+Do not assume every old document contains newly introduced fields.
+
+---
+
+# 22. AUTOMATED TESTING
+
+This is mandatory.
+
+The existing `firestore.rules.test.ts` must be examined.
+
+If it only defines test scenarios without actually executing assertions against the Firebase Emulator, replace or extend it with executable tests.
+
+Implement real tests for:
+
+## Authentication
+
+- Unauthenticated access denied.
+- Valid login.
+- Invalid login.
+- Logout.
+- Expired session handling.
+
+## Firestore security
+
+- Project owner permissions.
+- Admin permissions.
+- Member permissions.
+- Non-member access denied.
+- Unauthorized role escalation denied.
+- Unauthorized task modification denied.
+- Unauthorized notification access denied.
+- Unauthorized invitation operations denied.
+
+## WebSockets
+
+- Unauthenticated connection rejected.
+- Non-member room join rejected.
+- Unauthorized event rejected.
+- Impersonation attempt rejected.
+- Invalid payload rejected.
+- Authorized collaboration succeeds.
+
+## Task functionality
+
+- Task creation.
+- Task editing.
+- Task deletion.
+- Task assignment.
+- Task movement.
+- Subtask completion.
+- Dependency validation.
+- Recurring task generation.
+- Time tracking.
+
+## Other functionality
+
+- Notification delivery.
+- Comment mentions.
+- Sprint management.
+- Analytics calculations.
+- Saved filters.
+- Export permissions.
+- Responsive navigation.
+
+Use appropriate tools such as:
+
+- Firebase Emulator Suite.
+- Vitest.
+- React Testing Library.
+- Integration tests.
+- Playwright or another suitable browser automation tool.
+
+Do not claim a test passed unless it was actually executed.
+
+---
+
+# 23. ERROR HANDLING AND RELIABILITY
+
+Improve the entire application error-handling system.
+
+Implement:
+
+- Network error handling.
+- Firestore permission error handling.
+- Authentication errors.
+- WebSocket disconnection handling.
+- Retry logic with limits.
+- Offline indicators.
+- Loading states.
+- Empty states.
+- Form validation.
+- Safe optimistic update rollback.
+- Error boundaries.
+- Useful user-facing error messages.
+
+Do not expose internal stack traces or secrets to users.
+
+Ensure an individual failed component does not unnecessarily crash the entire application.
+
+---
+
+# 24. PRODUCTION CONFIGURATION AND DEPLOYMENT
+
+Review `package.json`, `vite.config.ts`, `server.ts`, `.env.example`, and `README.md`.
+
+Ensure:
+
+- Development mode works.
+- Production frontend build works.
+- Production server starts correctly.
+- TypeScript checks pass.
+- Dependencies are consistent.
+- Environment variables are documented.
+- No secrets are committed.
+- Firebase Admin is configured securely.
+- WebSocket server works in the intended deployment environment.
+- Production CORS is restricted to approved origins.
+- Health-check endpoint exists.
+- Errors are logged safely.
+- Graceful server shutdown is implemented.
+
+Do not assume a hosting provider supports persistent WebSocket connections. Document the requirements and ensure the architecture matches the intended hosting environment.
+
+Do not change deployment architecture unnecessarily.
+
+Replace the generic starter README with a complete Cadence README containing:
+
+- Project overview.
+- Feature list.
+- Technology stack.
+- Folder structure.
+- Prerequisites.
+- Installation instructions.
+- Environment setup.
+- Firebase setup.
+- Firestore rules deployment.
+- Firestore indexes setup.
+- Firebase Emulator instructions.
+- Development commands.
+- Build commands.
+- Test commands.
+- Production deployment instructions.
+- Troubleshooting.
+
+Update `.env.example` with variable names and safe placeholder values only.
+
+Never write actual secret values into source files.
+
+---
+
+# 25. CODE QUALITY AND PROJECT STRUCTURE
+
+Improve maintainability without unnecessary rewrites.
+
+Requirements:
+
+- Reusable components.
+- Clear separation of concerns.
+- Strong TypeScript typing.
+- No unnecessary `any`.
+- No duplicated business logic.
+- Centralized validation.
+- Consistent naming.
+- Clear API/service boundaries.
+- Consistent error handling.
+- Clean unused imports.
+- No dead code.
+- No broken imports.
+- No placeholder implementations.
+
+Split large components when it improves maintainability.
+
+Preserve existing functionality during refactoring.
+
+Use existing dependencies when they are appropriate.
+
+Only add new dependencies when there is a clear reason.
+
+---
+
+# 26. REQUIRED NEW COMPONENTS AND MODULES
+
+Create or reorganize components as appropriate.
+
+Suggested components:
+
+- `AnalyticsDashboard.tsx`
+- `StatCard.tsx`
+- `TaskCompletionChart.tsx`
+- `WorkloadChart.tsx`
+- `BurndownChart.tsx`
+- `CalendarView.tsx`
+- `TimelineView.tsx`
+- `MyTasksView.tsx`
+- `SprintBoard.tsx`
+- `SprintPlanningView.tsx`
+- `TeamManagement.tsx`
+- `NotificationCenter.tsx`
+- `NotificationPreferences.tsx`
+- `SubtaskList.tsx`
+- `TaskDependencies.tsx`
+- `TaskAttachments.tsx`
+- `TimeTracker.tsx`
+- `MilestoneManager.tsx`
+- `ProjectTemplates.tsx`
+- `SavedFilters.tsx`
+- `GlobalSearch.tsx`
+- `ExportManager.tsx`
+- `MobileNavigation.tsx`
+
+Suggested service modules:
+
+- `analyticsService.ts`
+- `notificationService.ts`
+- `sprintService.ts`
+- `attachmentService.ts`
+- `timeTrackingService.ts`
+- `searchService.ts`
+- `exportService.ts`
+- `templateService.ts`
+- `validationService.ts`
+
+These are suggested names, not a requirement to create empty files. Every created module must have real functionality and be integrated into the application.
+
+---
+
+# 27. FINAL ACCEPTANCE CRITERIA
+
+The project is not complete until the following are true:
+
+[ ] Existing login and registration still work.
+
+[ ] Existing projects and memberships are preserved.
+
+[ ] Existing tasks and comments are preserved.
+
+[ ] Existing Kanban drag-and-drop still works.
+
+[ ] Existing list view still works.
+
+[ ] Existing task details still work.
+
+[ ] Existing project invitations still work securely.
+
+[ ] Existing activity feed still works.
+
+[ ] Real-time project collaboration works.
+
+[ ] WebSocket room authorization is enforced.
+
+[ ] Firestore security rules are tested.
+
+[ ] Project roles are enforced server-side.
+
+[ ] Subtasks work.
+
+[ ] Dependencies work.
+
+[ ] Recurring tasks work.
+
+[ ] Attachments work with a configured storage provider.
+
+[ ] Time tracking works.
+
+[ ] Calendar view works.
+
+[ ] Timeline view works.
+
+[ ] My Tasks works.
+
+[ ] Sprint management works.
+
+[ ] Analytics use actual database data.
+
+[ ] Team workload analytics work.
+
+[ ] Notification center works.
+
+[ ] Mentions work.
+
+[ ] Saved filters work.
+
+[ ] Global search works.
+
+[ ] Project templates work.
+
+[ ] Milestones work.
+
+[ ] Reports and exports work.
+
+[ ] Responsive mobile navigation works.
+
+[ ] No horizontal overflow on mobile.
+
+[ ] Light and dark themes work consistently.
+
+[ ] Accessibility improvements are implemented.
+
+[ ] Firestore queries and indexes are reviewed.
+
+[ ] Automated tests are implemented and executed.
+
+[ ] TypeScript validation passes.
+
+[ ] Production build succeeds.
+
+[ ] Deployment documentation is complete.
+
+[ ] No secrets are exposed.
+
+[ ] No existing functionality has been silently removed.
+
+---
+
+# 28. EXECUTION INSTRUCTIONS — FOLLOW EXACTLY
+
+Work in the following order:
+
+PHASE 1 — Inspect the entire existing codebase and understand the architecture.
+
+PHASE 2 — Identify security vulnerabilities and fix authentication, Firestore rules, WebSocket authorization, and invitation security.
+
+PHASE 3 — Design safe and backward-compatible data structures.
+
+PHASE 4 — Implement advanced task management, subtasks, dependencies, recurring tasks, attachments, and time tracking.
+
+PHASE 5 — Implement enhanced Kanban, list, calendar, timeline, and personal task views.
+
+PHASE 6 — Implement sprint management, project milestones, templates, and team management.
+
+PHASE 7 — Implement analytics and reporting using real database records.
+
+PHASE 8 — Implement notification center, mentions, reminders, and activity auditing.
+
+PHASE 9 — Implement the complete premium responsive UI redesign.
+
+PHASE 10 — Optimize performance, accessibility, error handling, and reliability.
+
+PHASE 11 — Implement and execute automated security, unit, integration, and UI tests.
+
+PHASE 12 — Verify production build and update all documentation.
+
+You must execute all phases in this task.
+
+Do not stop after writing a plan.
+
+Do not ask me to implement any code manually.
+
+Do not return only code snippets.
+
+Modify the actual existing project files.
+
+If a tool or environment cannot perform a particular operation, implement as much as possible, clearly identify the limitation, and provide the exact remaining setup steps. Never falsely claim that an unavailable external service has been configured.
+
+If a third-party credential is required, build the integration securely and document the required environment variable. Never invent credentials.
+
+If the project environment has execution or context limits, prioritize security, data preservation, and core functionality first. Save working changes incrementally, then continue with the remaining features rather than discarding completed work.
+
+If a feature cannot safely be completed, do not create a fake version of it. Report the limitation honestly.
+
+---
+
+# 29. FINAL DELIVERY REPORT
+
+When implementation is complete, provide a clear final report containing:
+
+1. All features implemented.
+2. All existing features preserved.
+3. All security vulnerabilities addressed.
+4. All new files created.
+5. All existing files modified.
+6. Firestore schema changes.
+7. Firestore rules changes.
+8. Environment variables required.
+9. New dependencies installed.
+10. Tests executed and their actual results.
+11. TypeScript validation result.
+12. Production build result.
+13. Any remaining limitations.
+14. Exact commands to run the application locally.
+15. Exact deployment steps.
+
+Separate completed work from work requiring external credentials or manual configuration.
+
+Do not claim completion for functionality that has not been implemented and verified.
+
+# FINAL COMMAND
+
+Transform my existing Cadence project into a polished, secure, fully functional, scalable collaborative project-management SaaS platform.
+
+Implement every enhancement in this specification while preserving the existing application, authentication, Firebase integration, project data, and working functionality.
+
+**Do not give me another proposal. Execute the complete transformation directly in the existing codebase.**

@@ -1,0 +1,8 @@
+{
+  "name": "Cadence",
+  "description": "Collaborative real-time project management and Kanban workspace with drag-and-drop sprints, live WebSocket presence, team invitations, and persistent multi-user sync.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
